@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>猜拳小游戏</title>
+		<style type="text/css">
+		body{
+			margin: 0;
+			position: 0;
+		}
+			#app{
+				width: 600px;
+				height: 500px;
+				margin: 60px auto;
+			}
+			#app #app1-1{
+				border: 1 solid black;
+				flex-wrap: wrap;
+				display: flex;
+				flex-direction: row;
+				width: 100%;
+				height: 25%;
+			 }
+			 #app1-1 div {
+				  height: 100%;
+				  display: flex;
+				  
+			 }
+			#app11-1,#app11-3,#app11-2{
+				 flex: 1;
+			 }
+			 #app11-1 p,img{
+				 flex: 1;
+			 }
+			 img{
+				 width: 50px;
+				 height: 50px;
+			 }
+			 
+			#result{
+				width: 100%;
+				height: 20%;
+				text-align: center;
+				font-size: 50px;
+			}
+			
+			#choice{
+				width: 100%;
+				height: 20%;
+				display: flex;
+				
+			}
+			#choice p{
+				text-align: center;
+				 
+			}
+			#choice button{
+				width: 50px;
+				height: 50px;
+				justify-content: flex-end;
+			}
+			#history p{
+				font-size: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		
+		  <div id="app">
+			  <!-- 头部分 -->
+			  <div id="app1-1"> 
+			  <div id="app11-1"><p>Me</p> <img src="" id="me" /div>
+			  <div id="app11-2"><p style="color: red;">VS</p></div>
+			  <div id="app11-3"><p>Computer</p> <img src="" id="cp" ></div>
+			 </div>
+			  
+			 <div id="result">
+			 	<p id="show">Start</p>
+			 </div> 
+			 
+			 <div id="choice">
+			 	<button type="button" id="shitou">石头</button>
+				<button type="button" id="jiandao">剪刀</button>
+				<button type="button" id="bu">布</button>
+			 </div>
+			  
+			  <!-- choice -->
+		<!-- 	<div id="app1-1">
+			 <div id="app11-1"><p>Me</p> <img src="" ></div>
+			 <div id="app11-2"><p style="color: red">Choice</div>
+			 <div id="app11-3"><p>Computer</p> <img src="" ></div>
+			</div> -->
+			
+			<div id="history">
+				<p>总数:</p>
+				<p>赢:</p>
+				<p>输:</p>
+				<p>平:</p>
+			</div>
+			  
+			  
+		  </div>
+		  
+		   
+		
+		 <script type="text/javascript">
+		 //获取图片的DOM节点,方便之后操作
+		    var me=document.getElementById("me");
+			var cp=document.getElementById("cp");
+			var st=document.getElementById("shitou");
+			var jd=document.getElementById("jiandao");
+			var b=document.getElementById("bu");
+			var show=document.getElementById("show");
+			let  local=window.sessionStorage;
+			var meresult;
+			var cpresult;
+			var sum=0;
+			var append=0;
+			var fail=0;
+			var falt=0;
+		 	  var arr=[
+				  {name:"石头",src:"./shitou.jpg"},
+				  {name:"剪刀",src:"./jiandao.jpg"},
+				  {name:"布",src:"./bu.jpg"}
+			  ]
+			  
+			  
+			  //清空所有的东西
+			  window.onload=()=>{
+			  		local.setItem("append",0);
+			  	    local.setItem("fail",0);
+			  	    local.setItem("falt",0);
+			  }
+			  //设置电脑随机取一个数
+			  function Computer(){
+				  //电脑的随机函数(0-2之间)
+				  var random=Math.floor(Math.random()*arr.length);
+				   switch(random){
+					   case 0:
+					   cp.setAttribute("src",arr[0].src);
+					   cpresult=0;
+					   break ; 
+					   
+					   case 1:
+					   cp.setAttribute("src",arr[1].src);
+					   cpresult=1;
+					   break;
+					   
+					   case 2:
+					   cp.setAttribute("src",arr[2].src);
+					   cpresult=2;
+					   break;
+				   }
+			  }
+			 
+			 //给按钮添加点击事件
+st.onclick=()=>{meresult=0;me.previousElementSibling.innerHTML="石头";me.setAttribute("src",arr[0].src);Computer(),moundo();kk()};
+jd.onclick=()=>{meresult=1;me.previousElementSibling.innerHTML="剪刀";me.setAttribute("src",arr[1].src);Computer(),moundo();kk()};
+ b.onclick=()=>{meresult=2;me.previousElementSibling.innerHTML="布";me.setAttribute("src",arr[2].src);Computer(),moundo();kk()};
+	
+	 //判断比赛结果
+	   function moundo(){
+		   let sum=meresult-cpresult;
+		   // console.log("玩家:"+meresult+"-----"+"电脑:"+cpresult)
+		   if(sum==0){
+		   		   show.innerHTML="平!";
+				   falt+=1;
+				   local.setItem("falt",falt)
+		   }else if(sum == -1 || sum == 2 ){
+		   		   show.innerHTML="赢!";
+				   append+=1;
+				   local.setItem("append",append)
+				   
+		   }
+		   else{
+		   		   show.innerHTML="输!";
+				  fail+=1;
+				   local.setItem("fail",fail)
+		   }
+		   return sum;
+	   }
+	   
+	   //记录结果
+	  function kk(){
+		  var add=parseInt(local.getItem("append"))+parseInt(local.getItem("fail"))+parseInt(local.getItem("falt"));
+		  document.getElementById("history").children[0].innerHTML=`总数:${add}`;
+		  document.getElementById("history").children[1].innerHTML=`赢:${local.getItem("append")}`;
+		  document.getElementById("history").children[2].innerHTML=`输:${local.getItem("fail")}`;
+		  document.getElementById("history").children[3].innerHTML="平:"+local.getItem("falt");  
+	  }
+		 </script>
+		
+	</body>
+</html>
